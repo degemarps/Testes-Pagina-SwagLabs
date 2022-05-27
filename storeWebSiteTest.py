@@ -19,11 +19,15 @@ username = driver.find_element(By.ID, 'user-name')
 # escreve o nome do usuario
 username.send_keys('standard_user')
 
+time.sleep(1)
+
 # procura pelo campo do formulário para adicionar a senha
 password = driver.find_element(By.ID, 'password')
 
 # escreve a senha
 password.send_keys('secret_sauce')
+
+time.sleep(1)
 
 # procura pelo botão de login e depois aciona o click
 login_btn = driver.find_element(By.ID, 'login-button')
@@ -43,13 +47,19 @@ time.sleep(2)
 filter_drop_down = Select(driver.find_element(By.CLASS_NAME, 'product_sort_container'))
 filter_drop_down.select_by_visible_text('Price (low to high)')
 
+time.sleep(1)
+
 # procura pelo primeiro produto e clica no botão para adicionar ele ao carrinho
 sauce_labs_onesie_btn = driver.find_element(By.ID, 'add-to-cart-sauce-labs-onesie')
 sauce_labs_onesie_btn.click()
 
+time.sleep(1)
+
 # procura pelo segundo produto e clica no botão para adicionar ele ao carrinho
 t_shirt_red_btn = driver.find_element(By.ID, 'add-to-cart-test.allthethings()-t-shirt-(red)')
 t_shirt_red_btn.click()
+
+time.sleep(1)
 
 # procura pelo botão do carrinho e depois clica nele para acessar a lista de compras
 shopping_cart_btn = driver.find_element(By.CLASS_NAME, 'shopping_cart_link')
@@ -68,6 +78,8 @@ try:
     )
 except:
     driver.quit()
+
+time.sleep(2)
 
 # procura pelo botão de chekout para finalizar a compra e depois clica nele
 checkout_btn = driver.find_element(By.ID, 'checkout')
@@ -94,13 +106,51 @@ except:
 first_name = driver.find_element(By.ID, 'first-name')
 first_name.send_keys('standard')
 
+time.sleep(1)
+
 # encontra o campo do último nome e insere o texto
 last_name = driver.find_element(By.ID, 'last-name')
 last_name.send_keys('user')
 
+time.sleep(1)
+
 # encontra o campo do código postal e insere a informação
 post_code = driver.find_element(By.ID, 'postal-code')
 post_code.send_keys('11111-111')
+
+time.sleep(1)
+
+# procura pelo botão de continue e depois aciona o click nele
+continue_btn = driver.find_element(By.ID, 'continue')
+continue_btn.click()
+
+# espera aparecer a lista dos produtos adicionados e o resumo da compra
+try:
+    cart_list = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'cart_list'))
+    )
+    summary_info = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'summary_info'))
+    )
+except:
+    driver.quit()
+
+time.sleep(2)
+
+# procura pelo botão de finish para concluir a compra e aciona o seu click
+finish_btn = driver.find_element(By.ID, 'finish')
+finish_btn.click()
+
+# espera renderizar a tela de checkout completo
+try:
+    checkout_container = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, 'checkout_complete_container'))
+    )
+except:
+    driver.quit()
+
+# procura pelo texto que confirma a finalização da compra na página
+driver.find_element(By.XPATH, '//h2[text()="THANK YOU FOR YOUR ORDER"]')
 
 # espera 5 segundos antes de sair do navegador
 time.sleep(5)
